@@ -4,8 +4,9 @@ date: 2020-07-26T01:22:55.506Z
 title: พยายามอธิบาย Redux เป็นภาษาคน
 description: redux งงจังวุ้ย
 ---
-# Redux
-วันนี้เราจะมาเรียน Redux กัน
+# Redux Part 1
+วันนี้เราจะมาเรียน Redux กัน ไม่ต้องตกใจถ้ามันงง เพราะมันงงแน่ๆ เราต้องเข้าใจมันอย่างแท้จริงก่อน ไม่มีวิธีลัด แล้วหลังจากนี้จะแสดงวิธีที่ทำให้มันง่ายขึ้นโดยใช้ Redux Toolkit
+โดย Part แรกนี้เราจะทำความเข้าใจแบบภาพรวมก่อนนะครับ
 
 ### Redux คืออะไร
 Redux เป็น pattern และ libary เพื่อให้จัดการและอัพเดท state ของ app ได้โดยใช้ event ที่เรียกว่า **actions**
@@ -25,8 +26,14 @@ Redux เป็น pattern และ libary เพื่อให้จัดก
 ## Terminology
 
 ### Store
-Store มีไว้เก็บ state ของ app ในที่ๆเดียว
-การที่จะเปลี่ยน state ได้เราจะต้องแจกจ่าย action
+เป็นที่อยู่ของ state เราสร้าง store โดยการส่ง reducer ไปให้ store
+store มี api
+- `getState`
+- `subscribe`
+- `dispatch`
+
+### Dispatch
+หากต้องการจะ update state เราจะต้อง เรียกฟังชั่น `dispatch` โดยส่ง action เข้าไป
 
 ### Action
 เป็น POJO (Plain old javascript object / Javascript object ธรรมดาๆ) ที่มี field ชื่อว่า **type** คิดว่ามันเป็น event ที่บ่งบอกว่าเกิดอะไรขึ้นใน app เช่น login, logout, addTodo
@@ -49,6 +56,31 @@ const addTodo = text => {
 
 ### Reducers
 Actions จะเปลี่ยน state ได้อย่างไรขึ้นอยู่กับ **reducers**
+Reducer เป็น function ที่จะได้รับค่า state และ action และมีหน้าที่ๆจะตัดสินใจว่าจะทำอะไรกับ state โดยขึ้นอยู่กับ action
+
+มีกฏบังคับอยู่
+- ควรจะคำนวณ state ใหม่โดยขึ้นอยู่กับ state ปัจจุบันและ actions
+- **ห้าม**ปรับ state ปัจจุบัน ต้อง update แบบ immutable โดยการ copy state เดิมและเปลี่ยนแปลงค่าในตัว copy แล้ว return ตัวใหม่คืน
+- ห้ามทำ async หรือก่อ side effects
+
+Logic ในการเขียน reducers
+- สนใจ action ประเภทนี้ไหม
+    - ถ้าใช่ copy state แล้ว update ค่าแล้ว return กลับไป
+- ถ้าไม่สนใจ return state เดิม
+
+### Redux Application Data Flow
+- Setup เบื้องต้น
+    - สร้าง Redux store โดยการส่ง root reducer function เข้าไป
+    - Store เรียก rootReducer และรับ return value มาเก็บเป็น initial state
+    - UI ไปเช็ค state ใน store แล้วดูว่าควร render อะไร แถมยัง subscribe ไว้กับ store เพื่่อจะได้รับรู้เวลา state มีการเปลี่ยนแปลง
+- Updates
+    - เกิดอะไรบางอย่าง เช่น User คลิกปุ่ม
+    - ทำการ dispatch action ไปยัง store `dispatch({type: 'increment'})`
+    - Store รัน reducer function เพื่อเช็คว่า action นั้นๆ ควรจะเปลี่ยน state ยังไง
+    - Store ประกาศให้ ui รับรู้การเปลี่ยนแปลง
+    - UI เช็คว่ามีการเปลี่ยนแปลงเกิดขึ้นไหม
+    - UI rerender และแสดงการเปลี่ยนแปลง
+    
 
 ### ตัวอย่าง
 
