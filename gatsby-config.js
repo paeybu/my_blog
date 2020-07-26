@@ -1,12 +1,12 @@
 module.exports = {
   siteMetadata: {
     // edit below
-    title: `Gatsby Starter Personal Blog`,
-    author: `Gatsby`,
-    description: `A starter personal blog with styled components, dark mode, and Netlify CMS.`,
-    siteUrl: `https://gatsby-starter-blog-demo.netlify.com/`,
+    title: `PaeKabu`,
+    author: `Vachirarat Thavisaengsiri`,
+    description: `My personal blog`,
+    siteUrl: `https://paekabu-blog.netlify.app`,
     social: {
-      twitter: `gatsbyjs`,
+      twitter: `paekabu`,
     },
   },
   plugins: [
